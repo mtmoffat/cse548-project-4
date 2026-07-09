@@ -6,8 +6,8 @@ Updated on Wed Jan 29 10:18:09 2020
 
 @author: created by Sowmya Myneni and updated by Dijiang Huang
 
-M. Moffat: Modified for CSE 548 Project 4.
-M. Moffat: This version uses customized training/testing files for scenarios SA, SB, and SC.
+M. Tyler Moffat: Modified for CSE 548 Project 4.
+M. Tyler Moffat: This version uses customized training/testing files for scenarios SA, SB, and SC.
 """
 
 ########################################
@@ -20,16 +20,16 @@ import pandas as pd
 # Import numpy to perform operations on the dataset.
 import numpy as np
 
-# M. Moffat: Added sys so the scenario can be selected from the command line.
+# M. Tyler Moffat: Added sys so the scenario can be selected from the command line.
 import sys
 
 
 # Variable Setup
-# M. Moffat: Modified for Project 4 to use separate training and testing files.
-# M. Moffat: Run examples:
-# M. Moffat: python3 fnn_simple.py SA
-# M. Moffat: python3 fnn_simple.py SB
-# M. Moffat: python3 fnn_simple.py SC
+# M. Tyler Moffat: Modified for Project 4 to use separate training and testing files.
+# M. Tyler Moffat: Run examples:
+# M. Tyler Moffat: python3 fnn_simple.py SA
+# M. Tyler Moffat: python3 fnn_simple.py SB
+# M. Tyler Moffat: python3 fnn_simple.py SC
 
 TrainingDataPath = ''
 
@@ -40,15 +40,15 @@ BatchSize = 10
 NumEpoch = 10
 
 
-# M. Moffat: Choose scenario from the command line. Default is SA.
+# M. Tyler Moffat: Choose scenario from the command line. Default is SA.
 if len(sys.argv) > 1:
     ScenarioName = sys.argv[1].upper()
 else:
     ScenarioName = 'SA'
 
 
-# M. Moffat: Project scenario setup.
-# M. Moffat: A1 = DoS, A2 = Probe, A3 = U2R, A4 = R2L.
+# M. Tyler Moffat: Project scenario setup.
+# M. Tyler Moffat: A1 = DoS, A2 = Probe, A3 = U2R, A4 = R2L.
 SCENARIOS = {
     'SA': {
         'train_file': 'Training-a1-a3.csv',
@@ -88,8 +88,8 @@ print('Trained attack classes:', Scenario['trained_classes'])
 print('Testing attack classes:', Scenario['test_classes'])
 
 
-# M. Moffat: Attack class mapping for unknown attack analysis.
-# M. Moffat: A1 = DoS, A2 = Probe, A3 = U2R, A4 = R2L.
+# M. Tyler Moffat: Attack class mapping for unknown attack analysis.
+# M. Tyler Moffat: A1 = DoS, A2 = Probe, A3 = U2R, A4 = R2L.
 ATTACKS_SUBCLASS = {
     1: [
         'apache2', 'back', 'land', 'neptune', 'mailbomb', 'pod',
@@ -112,7 +112,7 @@ ATTACKS_SUBCLASS = {
 }
 
 
-# M. Moffat: Load one NSL-KDD file and return features, binary labels, and original text labels.
+# M. Tyler Moffat: Load one NSL-KDD file and return features, binary labels, and original text labels.
 def load_dataset(filename):
     dataset = pd.read_csv(filename, header=None, encoding='ISO-8859-1')
 
@@ -133,20 +133,20 @@ def load_dataset(filename):
     return X, y, label_column
 
 
-# M. Moffat: Load training and testing files separately.
-# M. Moffat: This replaces the original train_test_split approach.
+# M. Tyler Moffat: Load training and testing files separately.
+# M. Tyler Moffat: This replaces the original train_test_split approach.
 X_train_raw, y_train, train_labels = load_dataset(TrainingDataPath + TrainingData)
 X_test_raw, y_test, test_labels = load_dataset(TrainingDataPath + TestingData)
 
 
 # Encoding categorical data.
-# M. Moffat: Columns 1, 2, and 3 are categorical in NSL-KDD.
+# M. Tyler Moffat: Columns 1, 2, and 3 are categorical in NSL-KDD.
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 
 
-# M. Moffat: handle_unknown='ignore' prevents errors if testing data has categories not seen in training.
-# M. Moffat: sparse_output works in newer sklearn; sparse works in older sklearn.
+# M. Tyler Moffat: handle_unknown='ignore' prevents errors if testing data has categories not seen in training.
+# M. Tyler Moffat: sparse_output works in newer sklearn; sparse works in older sklearn.
 try:
     encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
 except TypeError:
@@ -159,12 +159,12 @@ ct = ColumnTransformer(
 )
 
 
-# M. Moffat: Fit the encoder on training data, then transform testing data using the same encoder.
+# M. Tyler Moffat: Fit the encoder on training data, then transform testing data using the same encoder.
 X_train = ct.fit_transform(X_train_raw)
 X_test = ct.transform(X_test_raw)
 
 
-# M. Moffat: Convert sparse matrices to arrays if needed.
+# M. Tyler Moffat: Convert sparse matrices to arrays if needed.
 if hasattr(X_train, 'toarray'):
     X_train = X_train.toarray()
 
@@ -172,7 +172,7 @@ if hasattr(X_test, 'toarray'):
     X_test = X_test.toarray()
 
 
-# M. Moffat: np.float is deprecated, so use float instead.
+# M. Tyler Moffat: np.float is deprecated, so use float instead.
 X_train = np.array(X_train, dtype=float)
 X_test = np.array(X_test, dtype=float)
 
@@ -182,7 +182,7 @@ from sklearn.preprocessing import StandardScaler
 
 sc = StandardScaler()
 
-# M. Moffat: Fit scaler only on training data, then transform testing data.
+# M. Tyler Moffat: Fit scaler only on training data, then transform testing data.
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
@@ -192,7 +192,7 @@ X_test = sc.transform(X_test)
 #######################################
 
 # Importing the Keras libraries and packages.
-# M. Moffat: Import Keras in a way that works in different Python environments.
+# M. Tyler Moffat: Import Keras in a way that works in different Python environments.
 try:
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense
@@ -239,7 +239,7 @@ classifier.compile(
 
 
 # Fitting the ANN to the Training set.
-# M. Moffat: Same batch size and epoch count are used for each scenario.
+# M. Tyler Moffat: Same batch size and epoch count are used for each scenario.
 classifierHistory = classifier.fit(
     X_train,
     y_train,
@@ -262,7 +262,7 @@ print('Loss [0,1]: %.4f' % loss, 'Accuracy [0,1]: %.4f' % accuracy)
 # Predicting the Test set results.
 y_pred_prob = classifier.predict(X_test).ravel()
 
-# M. Moffat: The original FNN lab uses 0.9 as the attack threshold.
+# M. Tyler Moffat: The original FNN lab uses 0.9 as the attack threshold.
 y_pred = (y_pred_prob > 0.9).astype(int)
 
 
@@ -285,7 +285,7 @@ print('[ FN, TP ]=')
 print(cm)
 
 
-# M. Moffat: Analyze unknown attack classes.
+# M. Tyler Moffat: Analyze unknown attack classes.
 trained_classes = set(Scenario['trained_classes'])
 test_classes = set(Scenario['test_classes'])
 unknown_classes = sorted(list(test_classes - trained_classes))
@@ -335,7 +335,7 @@ else:
         })
 
 
-# M. Moffat: Save prediction and summary output files.
+# M. Tyler Moffat: Save prediction and summary output files.
 prediction_output = pd.DataFrame({
     'actual_label': test_labels,
     'actual_binary': y_test,
@@ -384,7 +384,7 @@ import matplotlib.pyplot as plt
 # You can plot the accuracy.
 print('Plot the accuracy')
 
-# M. Moffat: Some Keras versions use "acc" and others use "accuracy".
+# M. Tyler Moffat: Some Keras versions use "acc" and others use "accuracy".
 if 'accuracy' in classifierHistory.history:
     accuracy_key = 'accuracy'
 else:
