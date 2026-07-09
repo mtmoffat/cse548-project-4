@@ -47,6 +47,7 @@ setA_train = []
 if training_attack_class_list[0][0] != 0 and len(training_attack_class_list[0]) != num_attack_class:
     for i in range(len(X_train)):
         # exp., X_train[i, -2] is the label of attack subclass, and attacks_subClass[training_attack_class_list[0][j]-1] identify the selected attack class
+        # M. Tyler Moffat: Added normal traffic into the model
         if str.lower(str(X_train[i,-2])) == 'normal':
             setA_train.append(X_train[i])
         for j in range(len(training_attack_class_list[0])):
@@ -69,6 +70,7 @@ setA_test = []
 if testing_attack_class_list[0][0] != 0 and len(testing_attack_class_list[0]) != num_attack_class:
     for i in range(len(X_test)):
         # exp., X_train[i, -2] is the label of attack subclass, and attacks_subClass[training_attack_class_list[0][j]-1] identify the selected attack class
+        # M. Tyler Moffat: Added normal traffic into the model
         if str.lower(str(X_test[i,-2])) == 'normal':
             setA_test.append(X_test[i])
         for j in range(len(testing_attack_class_list[0])):
